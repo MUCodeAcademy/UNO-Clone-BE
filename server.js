@@ -14,18 +14,26 @@ io.on(`connection`, (socket) =>{
     socket.on(`join room`, ({username, room}) =>{
         console.log("room socket")
         socket.join(room)
+        io.in(room).emit('enter room', {username: username, playerHand: []})
     })
     socket.on("message",(msg) =>{
-        // console.log(msg)
         io.in(msg.room).emit(`message`,{
             username: msg.username,
             body: msg.body 
         })
     })
 
-        // io.in(socket.room).emit("enter room", {
-        //     username: "SYSTEM", 
-        //     body: `${name} has entered the chat`})
+    socket.on("send player data",(data) =>{
+        io.in(data.room).emit(`host data`, {data})
+    })
+    
+    socket.on("host data send", (data) =>{
+        io.in(data.room).emit(`update game`, {data})
+    })
+    
+        io.in(socket.room).emit("enter room", {
+            username: "SYSTEM", 
+            body: `${name} has entered the chat`})
     
 
 
@@ -46,4 +54,4 @@ app.get("/", (req, res) =>
   res.sendFile("/build/index.html", { root: __dirname + "/" })
 );
 
-server.listen(PORT, ()=>{console.log(`Listening on port: ${PORT`)})
+server.listen(PORT, ()=>{console.log(`Listening on port: ${PORT}`)})
