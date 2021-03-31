@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
-
 const server = require("http").createServer(app);
+const PORT = process.env.PORT || 3000;
 const io = require(`socket.io`)(server, {
     cors: {
         origin: "*",
@@ -36,4 +36,14 @@ io.on(`connection`, (socket) =>{
     })
 })
 
-server.listen(3001, ()=>{console.log("yeehaw")})
+
+
+
+
+app.use(express.static(__dirname + "/build"));
+
+app.get("/", (req, res) =>
+  res.sendFile("/build/index.html", { root: __dirname + "/" })
+);
+
+server.listen(PORT, ()=>{console.log(`Listening on port: ${PORT`)})
