@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const io = require(`socket.io`)(server, {
     cors: {
         origin: "*",
@@ -31,9 +31,9 @@ io.on(`connection`, (socket) =>{
         io.in(data.room).emit(`update game`, {data})
     })
     
-        io.in(socket.room).emit("enter room", {
-            username: "SYSTEM", 
-            body: `${name} has entered the chat`})
+        // io.in(socket.room).emit("enter room", {
+        //     username: "SYSTEM", 
+        //     body: `${username} has entered the chat`})
     
 
 
