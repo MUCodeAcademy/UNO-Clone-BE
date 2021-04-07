@@ -30,9 +30,14 @@ io.on(`connection`, (socket) => {
   });
 
   socket.on("host data send", (data) => {
-    console.log(data);
     io.in(room).emit(`update game`, { ...data });
   });
+
+
+  socket.on("send enter room to host", (data) =>{
+    console.log(data)
+    io.in(room).emit("host enter room data", ({...data}))
+});
 
   // io.in(socket.room).emit("enter room", {
   //     username: "SYSTEM",
