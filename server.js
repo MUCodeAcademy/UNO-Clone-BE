@@ -10,13 +10,13 @@ const io = require(`socket.io`)(server, {
 
 io.on(`connection`, (socket) => {
   const { room } = socket.handshake.query;
+
   socket.on(`join room`, ({ username }) => {
     socket.join(room);
-    io.in(room).emit("message",{
-        username: "SYSTEM",
-        body: `${username} has entered the chat`
-    })
-    io.in(room).emit("enter room", { username: username, playerHand: [] });
+    io.in(room).emit("message", {
+      username: "SYSTEM",
+      body: `${username} has entered the chat`,
+    });
   });
   socket.on("message", (msg) => {
     io.in(room).emit(`message`, {
@@ -33,11 +33,9 @@ io.on(`connection`, (socket) => {
     io.in(room).emit(`update game`, { ...data });
   });
 
-
-  socket.on("send enter room to host", (data) =>{
-    console.log(data)
-    io.in(room).emit("host enter room data", ({...data}))
-});
+  socket.on("send enter room to host", (data) => {
+    io.emit(`update players on join`, { user: { ...data }, room: room });
+  });
 
   // io.in(socket.room).emit("enter room", {
   //     username: "SYSTEM",
