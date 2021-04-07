@@ -12,6 +12,10 @@ io.on(`connection`, (socket) => {
   const { room } = socket.handshake.query;
   socket.on(`join room`, ({ username }) => {
     socket.join(room);
+    io.in(room).emit("message",{
+        username: "SYSTEM",
+        body: `${username} has entered the chat`
+    })
     io.in(room).emit("enter room", { username: username, playerHand: [] });
   });
   socket.on("message", (msg) => {
